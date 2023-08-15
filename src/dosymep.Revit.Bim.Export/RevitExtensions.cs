@@ -1,5 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
+using System.Linq;
 
 using Autodesk.Revit.DB;
 
@@ -38,14 +40,51 @@ internal static class RevitExtensions {
     }
 
     public static Element ToBim(this Autodesk.Revit.DB.Element self) {
-        Element element = new Element();
+        Element element = new();
+        element.Info = self.ToInfo();
         element.Guid = Guid.NewGuid().ToString(); //self.UniqueId.Substring(0, 36);
         element.Type = self.GetType().Name;
         element.MeshId = self.Id.IntegerValue;
         //element.Vector = new dotbim.Vector();
         element.FaceColors = new List<int>();
-        //element.Info = new Dictionary<string, string>();
         return element;
+    }
+
+    public static Dictionary<string, string> ToInfo(this Autodesk.Revit.DB.Element self) {
+        string[] paramNames = self.Parameters
+            .Cast<Parameter>()
+            .Select(item => item.Definition.Name).Distinct()
+            .OrderBy(item => item)
+            .ToArray();
+
+        return paramNames
+            .Select(item => self.LookupParameter(item))
+            .Where(item => item != null)
+            .Select(item => item.ToParam())
+            .Where(item => !string.IsNullOrEmpty(item.Item2))
+            .ToDictionary(item => item.Item1, item => item.Item2);
+    }
+
+    private static (string, string) ToParam(this Parameter param) {
+        string value = param.AsValueString();
+        if(string.IsNullOrEmpty(value)) {
+            switch(param.StorageType) {
+                case StorageType.None:
+                    return (param.Definition.Name, default);
+                case StorageType.Integer:
+                    return (param.Definition.Name, param.AsInteger().ToString());
+                case StorageType.Double:
+                    return (param.Definition.Name, param.AsDouble().ToString(CultureInfo.InvariantCulture));
+                case StorageType.String:
+                    return (param.Definition.Name, param.AsString());
+                case StorageType.ElementId:
+                    return (param.Definition.Name, param.AsElementId().ToString());
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        return (param.Definition.Name, value);
     }
 
     private static double Convert(double value) {

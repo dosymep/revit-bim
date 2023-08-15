@@ -14,8 +14,7 @@ public class BimExport : IExportContext {
     private readonly File _bimFile = new() {
         SchemaVersion = "1.1.0",
         Meshes = new List<Mesh>(),
-        Elements = new List<Element>(),
-        Info = new Dictionary<string, string>()
+        Elements = new List<Element>()
     };
 
     private readonly Document _document;
@@ -42,6 +41,7 @@ public class BimExport : IExportContext {
     private Transform CurrentTransform => _transforms.Peek();
 
     public bool Start() {
+        _bimFile.Info = _document.ProjectInformation.ToInfo();
         return true;
     }
 
