@@ -4,6 +4,7 @@
         <OutputType>Library</OutputType>
         <LangVersion>11</LangVersion>
         <RootNamespace>dosymep.Revit.Bim.Export</RootNamespace>
+        <GenerateDocumentationFile>true</GenerateDocumentationFile>
         <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
         <IncludePackageReferencesDuringMarkupCompilation>false</IncludePackageReferencesDuringMarkupCompilation>
         <Platforms>x64</Platforms>
@@ -14,14 +15,14 @@
     <PropertyGroup Condition="'$(Configuration.StartsWith(`D`))'">
         <Optimization>false</Optimization>
         <DebugSymbols>true</DebugSymbols>
-        <OutputPath>bin\x64\Debug</OutputPath>
+        <OutputPath>bin\x64\Debug\$(RevitVersion)</OutputPath>
         <DefineConstants>$(DefineConstants);DEBUG;TRACE</DefineConstants>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Configuration.StartsWith(`R`))'">
         <Optimize>true</Optimize>
         <DebugSymbols>false</DebugSymbols>
-        <OutputPath>bin\x64\Release</OutputPath>
+        <OutputPath>bin\x64\Release\$(RevitVersion)</OutputPath>
         <DefineConstants>$(DefineConstants);RELEASE</DefineConstants>
     </PropertyGroup>
 
@@ -105,17 +106,13 @@
         <DefineConstants>$(DefineConstants);REVIT_2024_OR_GREATER</DefineConstants>
     </PropertyGroup>
 
-    <PropertyGroup Condition="'$(RevitVersion)'&gt;'2020'">
-        <AssemblyName>$(AssemblyName)_$(RevitVersion)</AssemblyName>
-    </PropertyGroup>
-
     <PropertyGroup>
         <Version>$(RevitVersion).0.1</Version>
         <FileVersion>$(RevitVersion).0.1</FileVersion>
         <Company>dosymep</Company>
         <Authors>dosymep</Authors>
-        <PackageTags>dosymep, revit, plugins</PackageTags>
-        <Copyright>Copyright © 2022</Copyright>
+        <PackageTags>dosymep, revit, plugins, bim, export</PackageTags>
+        <Copyright>Copyright © 2023</Copyright>
         <PackageProjectUrl>https://github.com/dosymep/revit-bim.git</PackageProjectUrl>
         <RepositoryUrl>https://github.com/dosymep/revit-bim.git</RepositoryUrl>
         <RepositoryType>Git</RepositoryType>
