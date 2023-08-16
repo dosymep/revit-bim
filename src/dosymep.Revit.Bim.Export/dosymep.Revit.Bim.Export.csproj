@@ -5,7 +5,6 @@
         <LangVersion>11</LangVersion>
         <RootNamespace>dosymep.Revit.Bim.Export</RootNamespace>
         <GenerateDocumentationFile>true</GenerateDocumentationFile>
-        <ImportWindowsDesktopTargets>true</ImportWindowsDesktopTargets>
         <IncludePackageReferencesDuringMarkupCompilation>false</IncludePackageReferencesDuringMarkupCompilation>
         <Platforms>x64</Platforms>
         <NoWarn>1701;1702;MSB3246</NoWarn>
