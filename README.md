@@ -11,3 +11,8 @@ document.Export("path/to/sample.bim",
 
 ![Result](docs/bim.png "Bim")
 ![Original](docs/revit.png "Revit")
+
+# Known Issues
+It's doesn't work 😂, 
+because I don't know how to fetch mesh indices correctly.
+But I think this project will be good start point to research.
