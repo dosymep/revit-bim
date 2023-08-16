@@ -122,7 +122,7 @@
     </PropertyGroup>
 
     <ItemGroup>
-        <PackageReference Include="dotbim" Version="1.1.0"/>
+        <PackageReference Include="dotbim" Version="1.1.0" />
         <PackageReference Include="ModPlus.Revit.API.$(RevitVersion)" Version="*">
             <PrivateAssets>all</PrivateAssets>
             <ExcludeAssets>runtime</ExcludeAssets>

@@ -10,7 +10,7 @@ using Mesh = dotbim.Mesh;
 
 namespace dosymep.Revit.Bim.Export;
 
-public class BimExport : IExportContext {
+internal class BimExport : IExportContext {
     private readonly File _bimFile = new() {
         SchemaVersion = "1.1.0",
         Meshes = new List<Mesh>(),
@@ -19,6 +19,7 @@ public class BimExport : IExportContext {
 
     private readonly Document _document;
     private readonly string _fileName;
+    private readonly BimExportOptions _options;
     private readonly Stack<Transform> _transforms = new();
 
     private Document _currentDocument;
@@ -30,9 +31,10 @@ public class BimExport : IExportContext {
 
     private int _meshId;
 
-    public BimExport(Document document, string fileName) {
+    public BimExport(Document document, string fileName, BimExportOptions options) {
         _document = document;
         _fileName = fileName;
+        _options = options;
         _currentDocument = _document;
 
         _transforms.Push(Transform.Identity);
@@ -41,7 +43,10 @@ public class BimExport : IExportContext {
     private Transform CurrentTransform => _transforms.Peek();
 
     public bool Start() {
-        _bimFile.Info = _document.ProjectInformation.ToInfo();
+        if(_options.WithDocumentInfo) {
+            _bimFile.Info = _document.ProjectInformation.ToInfo();
+        }
+        
         return true;
     }
 
@@ -63,6 +68,10 @@ public class BimExport : IExportContext {
     public RenderNodeAction OnElementBegin(ElementId elementId) {
         Autodesk.Revit.DB.Element element = _currentDocument.GetElement(elementId);
         _currentElement = element.ToBim();
+        if(_options.WithElementInfo) {
+            _currentElement.Info = element.ToInfo();
+        }
+
         _currentElement.MeshId = _meshId++;
         _bimFile.Elements.Add(_currentElement);
 
@@ -93,6 +102,9 @@ public class BimExport : IExportContext {
     }
 
     public RenderNodeAction OnLinkBegin(LinkNode node) {
+        if(!_options.WithLinks) {
+            return RenderNodeAction.Skip;
+        }
         _currentDocument = node.GetDocument();
         _transforms.Push(CurrentTransform.Multiply(node.GetTransform()));
 

@@ -41,10 +41,8 @@ internal static class RevitExtensions {
 
     public static Element ToBim(this Autodesk.Revit.DB.Element self) {
         Element element = new();
-        element.Info = self.ToInfo();
         element.Guid = Guid.NewGuid().ToString(); //self.UniqueId.Substring(0, 36);
         element.Type = self.GetType().Name;
-        element.MeshId = self.Id.IntegerValue;
         //element.Vector = new dotbim.Vector();
         element.FaceColors = new List<int>();
         return element;

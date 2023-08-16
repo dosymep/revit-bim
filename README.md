@@ -1,12 +1,10 @@
 # Usage
 ```csharp
-var customExport = new CustomExporter(
-    uiApplication.ActiveUIDocument.Document,
-    new BimExport(uiApplication.ActiveUIDocument.Document, @"path\to\sample.bim"));
+View view = uiApplication.ActiveUIDocument.ActiveView;
+Document document = uiApplication.ActiveUIDocument.Document;
 
-
-customExport.IncludeGeometricObjects = false;
-customExport.Export(uiApplication.ActiveUIDocument.ActiveView);
+document.Export("path/to/sample.bim",
+    new BimExportOptions() {View = view, WithLinks = true, WithElementInfo = true, WithDocumentInfo = true})
 ```
 
 # Sample
