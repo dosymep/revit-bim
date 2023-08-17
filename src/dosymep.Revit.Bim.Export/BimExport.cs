@@ -12,25 +12,19 @@ namespace dosymep.Revit.Bim.Export;
 
 internal class BimExport : IExportContext {
     private readonly File _bimFile = new() {
-        SchemaVersion = "1.1.0",
-        Meshes = new List<Mesh>(),
-        Elements = new List<Element>()
+        SchemaVersion = "1.1.0", Meshes = new List<Mesh>(), Elements = new List<Element>()
     };
 
     private readonly Document _document;
     private readonly string _fileName;
     private readonly BimExportOptions _options;
     private readonly Stack<Transform> _transforms = new();
-
-    private Document _currentDocument;
-    private Element _currentElement;
-
-    private int _currentIndex;
-    private Mesh _currentMesh;
-    private Dictionary<XYZ, int> _indexCache = new(new XyzEqualityComparer());
-
+    
     private int _meshId;
-
+    private Mesh _currentMesh;
+    private Element _currentElement;
+    private Document _currentDocument;
+    
     public BimExport(Document document, string fileName, BimExportOptions options) {
         _document = document;
         _fileName = fileName;
@@ -46,7 +40,7 @@ internal class BimExport : IExportContext {
         if(_options.WithDocumentInfo) {
             _bimFile.Info = _document.ProjectInformation.ToInfo();
         }
-        
+
         return true;
     }
 
@@ -87,9 +81,7 @@ internal class BimExport : IExportContext {
 
     public void OnElementEnd(ElementId elementId) {
         _currentMesh = default;
-        _currentIndex = default;
         _currentElement = default;
-        _indexCache = new Dictionary<XYZ, int>();
     }
 
     public RenderNodeAction OnInstanceBegin(InstanceNode node) {
@@ -105,6 +97,7 @@ internal class BimExport : IExportContext {
         if(!_options.WithLinks) {
             return RenderNodeAction.Skip;
         }
+
         _currentDocument = node.GetDocument();
         _transforms.Push(CurrentTransform.Multiply(node.GetTransform()));
 
@@ -136,22 +129,10 @@ internal class BimExport : IExportContext {
 
     public void OnPolymesh(PolymeshTopology node) {
         Transform currentTransform = CurrentTransform;
-        IList<XYZ> points = node.GetPoints()
-            .Select(item => currentTransform.OfPoint(item))
-            .ToArray();
-
         foreach(PolymeshFacet polymeshFacet in node.GetFacets()) {
-            foreach(XYZ point in polymeshFacet.Enumerate(points)) {
-                int index;
-                if(_indexCache.TryGetValue(point, out int result)) {
-                    index = result;
-                } else {
-                    index = _currentIndex++;
-                    _indexCache.Add(point, _currentIndex);
-                }
-
-                _currentMesh.Indices.Add(index);
-                _currentMesh.Coordinates.AddRange(point.Enumerate());
+            foreach(int vertex in polymeshFacet.GetVertices()) {
+                _currentMesh.Indices.Add(vertex);
+                _currentMesh.Coordinates.AddRange(currentTransform.OfPoint(node.GetPoint(vertex)).Enumerate());
             }
         }
     }
