@@ -82,7 +82,10 @@ internal class DotBimExportContext : IExportContext {
     }
 
     public RenderNodeAction OnInstanceBegin(InstanceNode node) {
-        _transforms.Push(CurrentTransform.Multiply(node.GetTransform()));
+        Transform transform = CurrentTransform;
+        
+        _transforms.Push(transform.Multiply(node.GetTransform()));
+       
         return RenderNodeAction.Proceed;
     }
 
@@ -95,8 +98,10 @@ internal class DotBimExportContext : IExportContext {
             return RenderNodeAction.Skip;
         }
 
+        Transform transform = CurrentTransform;
+
         _currentDocument = node.GetDocument();
-        _transforms.Push(CurrentTransform.Multiply(node.GetTransform()));
+        _transforms.Push(transform.Multiply(node.GetTransform()));
 
         return RenderNodeAction.Proceed;
     }
