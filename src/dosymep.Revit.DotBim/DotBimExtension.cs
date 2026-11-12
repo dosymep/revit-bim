@@ -5,17 +5,26 @@ using dosymep.Revit.DotBim.Internal;
 namespace dosymep.Revit.DotBim;
 
 /// <summary>
-/// Provides document .bim file export extensions.
+/// Provides extension methods for exporting a Revit <see cref="Document"/> to the dotbim (<c>.bim</c>) file format.
 /// </summary>
 public static class DotBimExtension {
     /// <summary>
-    /// Exports the document to .bim file format.
+    /// Exports the specified document to a <c>.bim</c> file using Revit's <see cref="CustomExporter"/>.
     /// </summary>
-    /// <param name="document">Exporting document.</param>
-    /// <param name="dotBimFilePath">Output file path.</param>
-    /// <param name="options">Bim export options.</param>
-    /// <exception cref="System.ArgumentException">When <paramref name="dotBimFilePath"/> is null or empty or if the path does not end with ".bim".</exception>
-    /// <exception cref="System.ArgumentNullException">When <paramref name="document"/> or <paramref name="options"/> is null.</exception>
+    /// <param name="document">The Revit document to export.</param>
+    /// <param name="dotBimFilePath">The output file path. Must end with <c>.bim</c> (case-insensitive).</param>
+    /// <param name="options">Export options, including the <see cref="View3D"/> used for export.</param>
+    /// <exception cref="System.ArgumentNullException">
+    /// Thrown when <paramref name="document"/> or <paramref name="options"/> is <see langword="null"/>.
+    /// </exception>
+    /// <exception cref="System.ArgumentException">
+    /// Thrown when <paramref name="dotBimFilePath"/> is <see langword="null"/> or empty,
+    /// or when the path does not end with <c>.bim</c>.
+    /// </exception>
+    /// <remarks>
+    /// Geometric objects such as curves and faces are skipped.
+    /// Coordinates are written in meters. The written schema version is 1.2.0.
+    /// </remarks>
     public static void Export(this Document document, string dotBimFilePath, DotBimOptions options) {
         if(document == null) {
             throw new ArgumentNullException(nameof(document));
