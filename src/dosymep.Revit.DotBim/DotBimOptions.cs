@@ -1,28 +1,28 @@
 ﻿using Autodesk.Revit.DB;
 
-namespace dosymep.Revit.Bim.Export;
+namespace dosymep.Revit.DotBim;
 
 /// <summary>
 /// Bim export options.
 /// </summary>
-public sealed class BimExportOptions {
+public sealed class DotBimOptions {
     /// <summary>
     /// Exporting View.
     /// </summary>
-    public View View { get; set; }
-    
+    public required View View { get; init; }
+
     /// <summary>
     /// If true export with links. Default value is false.
     /// </summary>
-    public bool WithLinks { get; set; }
-    
+    public bool WithLinks { get; init; }
+
     /// <summary>
     /// If true export with element params info. Default value is false.
     /// </summary>
-    public bool WithElementInfo { get; set; }
-    
+    public bool WithElementInfo { get; init; }
+
     /// <summary>
     /// If true export with document params info. Default value is false.
     /// </summary>
-    public bool WithDocumentInfo { get; set; }
+    public bool WithDocumentInfo { get; init; }
 }

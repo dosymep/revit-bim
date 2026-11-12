@@ -1,0 +1,37 @@
+<Project Sdk="Autodesk.Revit.Sdk.Refs/2.0.0">
+
+    <PropertyGroup>
+        <ShowBuildInfo>true</ShowBuildInfo>
+        <RootNamespace>dosymep.Revit.DotBim</RootNamespace>
+        <Configurations>Debug;Release;D2016;D2017;D2018;D2019;D2020;D2021;D2022;D2023;D2024;D2025;D2026;D2026.5;D2027</Configurations>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <PackageReadmeFile>README.md</PackageReadmeFile>
+        <PackageLicenseFile>LICENSE.md</PackageLicenseFile>
+
+        <Company>dosymep</Company>
+        <Authors>dosymep</Authors>
+        <Copyright>Copyright © 2026</Copyright>
+
+        <Description>A Revit API library for exporting models to dotbim.</Description>
+        <PackageTags>dosymep, revit, bim, dotbim, export</PackageTags>
+
+        <RepositoryType>Git</RepositoryType>
+        <RepositoryUrl>https://github.com/dosymep/revit-dotbim</RepositoryUrl>
+        <PackageProjectUrl>https://github.com/dosymep/revit-dotbim.git</PackageProjectUrl>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Version>2.0.0</Version>
+        <FileVersion>2.0.0</FileVersion>
+        <PackageVersion>2.0.0</PackageVersion>
+        <AssemblyVersion>2.0.0</AssemblyVersion>
+    </PropertyGroup>
+
+    <ItemGroup>
+        <PackageReference Include="dotbim" Version="1.2.0"/>
+        <PackageReference Include="Polyfill" Version="11.4.5"/>
+    </ItemGroup>
+
+</Project>
