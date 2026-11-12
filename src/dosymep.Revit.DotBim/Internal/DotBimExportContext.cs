@@ -107,8 +107,10 @@ internal class DotBimExportContext : IExportContext {
     }
 
     public void OnLinkEnd(LinkNode node) {
-        _transforms.Pop();
-        _currentDocument = _document;
+        if(_options.WithLinks) {
+            _transforms.Pop();
+            _currentDocument = _document;
+        }
     }
 
     public void OnMaterial(MaterialNode node) {
