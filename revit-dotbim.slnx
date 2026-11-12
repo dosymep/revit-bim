@@ -1,27 +1,34 @@
 ﻿<Solution>
     <Configurations>
-        <BuildType Name="D2016"/>
-        <BuildType Name="D2017"/>
-        <BuildType Name="D2018"/>
-        <BuildType Name="D2019"/>
-        <BuildType Name="D2020"/>
-        <BuildType Name="D2021"/>
-        <BuildType Name="D2022"/>
-        <BuildType Name="D2023"/>
-        <BuildType Name="D2024"/>
-        <BuildType Name="D2025"/>
-        <BuildType Name="D2026"/>
-        <BuildType Name="D2026.5"/>
-        <BuildType Name="D2027"/>
-        <Platform Name="x64"/>
+        <BuildType Name="D2016" />
+        <BuildType Name="D2017" />
+        <BuildType Name="D2018" />
+        <BuildType Name="D2019" />
+        <BuildType Name="D2020" />
+        <BuildType Name="D2021" />
+        <BuildType Name="D2022" />
+        <BuildType Name="D2023" />
+        <BuildType Name="D2024" />
+        <BuildType Name="D2025" />
+        <BuildType Name="D2026" />
+        <BuildType Name="D2026.5" />
+        <BuildType Name="D2027" />
+        <Platform Name="x64" />
     </Configurations>
     <Folder Name="/Solution Items/">
-        <File Path=".editorconfig"/>
-        <File Path="CONTRIBUTING.md"/>
-        <File Path="CREDITS.md"/>
-        <File Path="LICENSE.md"/>
-        <File Path="README.md"/>
+        <File Path=".editorconfig" />
+        <File Path="CONTRIBUTING.md" />
+        <File Path="CREDITS.md" />
+        <File Path="LICENSE.md" />
+        <File Path="README.md" />
     </Folder>
+    <Project Path="build/Build.csproj">
+        <BuildType Solution="D2016|*" Project="Debug" />
+        <BuildType Solution="D2017|*" Project="Debug" />
+        <BuildType Solution="D2018|*" Project="Debug" />
+        <Build Solution="D2016|*" Project="false" />
+        <Build Solution="D2017|*" Project="false" />
+    </Project>
     <Project Path="src/dosymep.Revit.DotBim/dosymep.Revit.DotBim.csproj">
         <Platform Project="x64"/>
     </Project>
