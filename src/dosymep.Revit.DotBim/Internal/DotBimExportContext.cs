@@ -157,4 +157,9 @@ internal class DotBimExportContext : IExportContext {
     public void OnLight(LightNode node) { }
 
     #endregion
+
+#if REVIT2016
+    public void OnDaylightPortal(DaylightPortalNode node) { }
+#endif
+    
 }

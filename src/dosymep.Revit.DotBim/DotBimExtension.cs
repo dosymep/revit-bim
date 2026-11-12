@@ -39,6 +39,6 @@ public static class DotBimExtension {
 
         // To skip geometry objects (Curve, Face, etc.)
         customExport.IncludeGeometricObjects = false;
-        customExport.Export(options.View);
+        customExport.Export((View3D) options.View);
     }
 }

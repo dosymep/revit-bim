@@ -60,7 +60,13 @@ internal static class RevitExtensions {
         return (param.Definition.Name, value);
     }
 
+#if REVIT2021_OR_GREATER
     private static double Convert(double value) {
         return UnitUtils.ConvertFromInternalUnits(value, UnitTypeId.Meters);
     }
+#else
+    private static double Convert(double value) {
+        return UnitUtils.ConvertFromInternalUnits(value, DisplayUnitType.DUT_METERS);
+    }
+#endif
 }
