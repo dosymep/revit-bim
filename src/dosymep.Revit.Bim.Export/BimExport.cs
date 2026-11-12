@@ -25,6 +25,8 @@ internal class BimExport : IExportContext {
     private Element _currentElement;
     private Document _currentDocument;
     
+    private int[] _currentColor = { 200, 200, 200, 255 };
+    
     public BimExport(Document document, string fileName, BimExportOptions options) {
         _document = document;
         _fileName = fileName;
@@ -67,19 +69,22 @@ internal class BimExport : IExportContext {
         }
 
         _currentElement.MeshId = _meshId++;
-        _bimFile.Elements.Add(_currentElement);
 
         _currentMesh = new Mesh();
         _currentMesh.MeshId = _currentElement.MeshId;
 
         _currentMesh.Indices = new List<int>();
         _currentMesh.Coordinates = new List<double>();
-        _bimFile.Meshes.Add(_currentMesh);
 
         return RenderNodeAction.Proceed;
     }
 
     public void OnElementEnd(ElementId elementId) {
+        if(_currentMesh != null && _currentMesh.Indices.Count > 0) {
+            _bimFile.Meshes.Add(_currentMesh);
+            _bimFile.Elements.Add(_currentElement);
+        }
+        
         _currentMesh = default;
         _currentElement = default;
     }
@@ -123,17 +128,34 @@ internal class BimExport : IExportContext {
     }
 
     public void OnMaterial(MaterialNode node) {
-        _currentElement.FaceColors.AddRange(node.Color.Enumerate());
-        _currentElement.FaceColors.Add((int) ((100 - node.Transparency) * 2.55555555));
+        int alpha = (int) System.Math.Round(
+            (1.0 - node.Transparency) * 255);
+
+        _currentColor = new[] {
+            (int) node.Color.Red,
+            (int) node.Color.Green,
+            (int) node.Color.Blue,
+            System.Math.Max(0, System.Math.Min(255, alpha))
+        };
     }
 
     public void OnPolymesh(PolymeshTopology node) {
-        Transform currentTransform = CurrentTransform;
-        foreach(PolymeshFacet polymeshFacet in node.GetFacets()) {
-            foreach(int vertex in polymeshFacet.GetVertices()) {
-                _currentMesh.Indices.Add(vertex);
-                _currentMesh.Coordinates.AddRange(currentTransform.OfPoint(node.GetPoint(vertex)).Enumerate());
-            }
+        Transform transform = CurrentTransform;
+        
+        bool mirrored = transform.HasReflection;
+        int offset = _currentMesh.Coordinates.Count / 3;
+        
+        foreach(XYZ point in node.GetPoints()) {
+            _currentMesh.Coordinates.AddRange(
+                transform.OfPoint(point).Enumerate());
+        }
+
+        foreach(PolymeshFacet facet in node.GetFacets()) {
+            _currentMesh.Indices.Add(offset + facet.V1);
+            _currentMesh.Indices.Add(offset + (mirrored ? facet.V3 : facet.V2));
+            _currentMesh.Indices.Add(offset + (mirrored ? facet.V2 : facet.V3));
+            
+            _currentElement.FaceColors.AddRange(_currentColor);
         }
     }
 }

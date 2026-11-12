@@ -45,6 +45,15 @@ internal static class RevitExtensions {
         element.Type = self.GetType().Name;
         //element.Vector = new dotbim.Vector();
         element.FaceColors = new List<int>();
+       
+        element.Vector = new Vector {
+            X = 0, Y = 0, Z = 0
+        };
+
+        element.Rotation = new Rotation {
+            Qx = 0, Qy = 0, Qz = 0, Qw = 1
+        };
+        
         return element;
     }
 
