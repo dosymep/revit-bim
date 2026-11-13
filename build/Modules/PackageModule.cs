@@ -17,20 +17,44 @@ public sealed class PackageModule : Module {
         _options = options.Value;
     }
 
-    protected override Task ExecuteModuleAsync(IModuleContext context, CancellationToken cancellationToken) {
+    protected override async Task ExecuteModuleAsync(IModuleContext context, CancellationToken cancellationToken) {
         Directory.CreateDirectory(_options.ArtifactsDirectory);
 
-        return ParallelHelpers.ForEachAsync(
-            _options.RevitVersions,
-            cancellationToken,
-            (revitVersion, token) => new ValueTask(PackageAsync(revitVersion, token)),
-            _options.MaxDegreeOfParallelism);
+        string stagingRoot = Path.Combine(_options.ArtifactsDirectory, ".staging");
+        try {
+            foreach(string revitVersion in _options.RevitVersions) {
+                await PackageAsync(stagingRoot, revitVersion, cancellationToken);
+            }
+        } finally {
+            if(Directory.Exists(stagingRoot)) {
+                Directory.Delete(stagingRoot, recursive: true);
+            }
+        }
     }
 
-    private Task PackageAsync(string revitVersion, CancellationToken cancellationToken) {
-        return FileSystemHelpers.CreateZipAsync(
-            _options.GetOutputDirectory(revitVersion), 
-            _options.GetArchivePath(revitVersion),
-            cancellationToken);
+    private async Task PackageAsync(string stagingRoot, string revitVersion, CancellationToken cancellationToken) {
+        string outputDirectory = _options.GetOutputDirectory(revitVersion);
+        string addinFileName = $"{_options.ProjectName}.addin";
+        string addinPath = Path.Combine(outputDirectory, addinFileName);
+
+        if(!File.Exists(addinPath)) {
+            throw new FileNotFoundException($"Add-in manifest was not found: {addinPath}");
+        }
+
+        string packageDirectory = Path.Combine(stagingRoot, revitVersion);
+        if(Directory.Exists(packageDirectory)) {
+            Directory.Delete(packageDirectory, recursive: true);
+        }
+
+        Directory.CreateDirectory(packageDirectory);
+        File.Copy(addinPath, Path.Combine(packageDirectory, addinFileName));
+
+        FileSystemHelpers.CopyDirectory(
+            outputDirectory,
+            Path.Combine(packageDirectory, _options.ProjectName),
+            filePath => string.Equals(Path.GetFileName(filePath), addinFileName, StringComparison.OrdinalIgnoreCase));
+
+        await FileSystemHelpers.CreateZipAsync(
+            packageDirectory, _options.GetArchivePath(revitVersion), cancellationToken);
     }
 }

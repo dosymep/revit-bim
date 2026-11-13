@@ -23,13 +23,24 @@
         <File Path="README.md" />
     </Folder>
     <Project Path="build/Build.csproj">
-        <BuildType Solution="D2016|*" Project="Debug" />
-        <BuildType Solution="D2017|*" Project="Debug" />
         <BuildType Solution="D2018|*" Project="Debug" />
-        <Build Solution="D2016|*" Project="false" />
-        <Build Solution="D2017|*" Project="false" />
+        <BuildType Solution="D2019|*" Project="Debug" />
+        <BuildType Solution="D2020|*" Project="Debug" />
+        <BuildType Solution="D2021|*" Project="Debug" />
+        <BuildType Solution="D2022|*" Project="Debug" />
+        <BuildType Solution="D2023|*" Project="Debug" />
+        <BuildType Solution="D2024|*" Project="Debug" />
+        <BuildType Solution="D2025|*" Project="Debug" />
+        <BuildType Solution="D2026.5|*" Project="Debug" />
+        <BuildType Solution="D2026|*" Project="Debug" />
+        <BuildType Solution="D2027|*" Project="Debug" />
+        <Platform Project="x64" />
+        <Build Project="false" />
     </Project>
     <Project Path="src/dosymep.Revit.DotBim/dosymep.Revit.DotBim.csproj">
-        <Platform Project="x64"/>
+        <Platform Project="x64" />
+    </Project>
+    <Project Path="src/DotBimExport/DotBimExport.csproj">
+        <Platform Project="x64" />
     </Project>
 </Solution>

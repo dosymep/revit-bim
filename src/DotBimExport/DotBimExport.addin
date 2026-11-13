@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<RevitAddIns>
+    <AddIn Type="Application">
+        <Name>DotBimExport</Name>
+        <Assembly>.\DotBimExport\DotBimExport.dll</Assembly>
+        <AddInId>EEEE0555-E587-4E51-95E6-D515E181FC11</AddInId>
+        <FullClassName>DotBimExport.DotBimExportApp</FullClassName>
+        <Description>A Revit plugin for exporting 3D views to dotbim (.bim), powered by dosymep.Revit.DotBim.</Description>
+        <VendorId>dosymep</VendorId>
+        <VendorDescription>dosymep, https://dosymep.net</VendorDescription>
+    </AddIn>
+</RevitAddIns>

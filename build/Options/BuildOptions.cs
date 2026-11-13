@@ -19,7 +19,7 @@ public sealed class BuildOptions {
 
     public string SolutionPath => Path.Combine(SolutionRoot, SolutionFileName);
 
-    public string ProjectName { get; set; } = "dosymep.Revit.DotBim";
+    public string ProjectName { get; set; } = "DotBimExport";
 
     public string SrcDirectory => Path.Combine(SolutionRoot, "src");
 
