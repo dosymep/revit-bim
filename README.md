@@ -1,25 +1,50 @@
-# dosymep.Revit.DotBim
+# DotBimExport
 
 [![JetBrains Rider](https://img.shields.io/badge/JetBrains-Rider-blue.svg)](https://www.jetbrains.com/rider)
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 [![Revit 2016-2027](https://img.shields.io/badge/Revit-2016--2027-blue.svg)](https://www.autodesk.com/products/revit/overview)
 
-A Revit API library for exporting models to the [dotbim](https://github.com/paireks/dotbim) (`.bim`) format.
+A Revit plugin for exporting 3D views to the [dotbim](https://github.com/paireks/dotbim) (`.bim`) format.
+Export is implemented by the `dosymep.Revit.DotBim` library in this repository.
 
 ## Features
 
-- Export a Revit document to a `.bim` file via an extension method on `Document`
+- Ribbon command that exports the active 3D view to a `.bim` file
 - Optional export of linked models
 - Optional element and project parameter info
 - Support for Revit 2016–2027 (including `2026.5`)
 
-## Installation
+## Install
 
-```bash
-dotnet add package dosymep.Revit.DotBim
+1. Download `DotBimExport.{version}.zip` from [Releases](https://github.com/dosymep/revit-dotbim/releases) (match your Revit year).
+2. Extract the archive into the Revit Addins folder for that version, for example:
+
+   `%AppData%\Autodesk\Revit\Addins\2025\`
+
+3. Restart Revit. The **dotbim** panel appears with **Export DotBim**.
+
+Archive layout:
+
+```text
+DotBimExport.2025.zip
+  DotBimExport.addin
+  DotBimExport/
+    DotBimExport.dll
+    dosymep.Revit.DotBim.dll
+    …
 ```
 
 ## Usage
+
+1. Open a **3D view**.
+2. On the **dotbim** panel, click **Export DotBim**.
+3. Choose the output `.bim` path.
+
+The plugin exports with links, element info, and document info enabled.
+
+### Library API
+
+`dosymep.Revit.DotBim` exposes an extension method on `Document` if you want to call export from your own code:
 
 ```csharp
 View view = uiApplication.ActiveUIDocument.ActiveView;
@@ -43,14 +68,14 @@ document.Export("path/to/sample.bim",
 
 ## Build
 
-The repository includes a [ModularPipelines](https://github.com/thomhurst/ModularPipelines) app in `build/`. It cleans `bin`/`obj`, restores the solution, builds `dosymep.Revit.DotBim` for each selected Revit version into `bin/<version>/`, and packages zip archives under `artifacts/`.
+The repository includes a [ModularPipelines](https://github.com/thomhurst/ModularPipelines) app in `build/`. It cleans `bin`/`obj`, restores the solution, builds `DotBimExport` for each selected Revit version into `bin/<version>/DotBimExport/`, and packages add-in zip archives under `artifacts/`.
 
 Pipeline stages:
 
 1. **Clean** — remove root `bin/` and `artifacts/`, plus project `bin`/`obj` under `src/`
 2. **Restore** — restore NuGet packages for the solution
-3. **Build** — compile the library per Revit version
-4. **Package** — zip each version output into `artifacts/`
+3. **Build** — compile the plugin (and its library dependency) per Revit version
+4. **Package** — zip each version as a Revit add-in layout into `artifacts/`
 
 ### Prerequisites
 
@@ -107,12 +132,12 @@ Available configurations: `D2016` … `D2027` (and `D2026.5`).
 ```text
 bin/
   2024/
-    dosymep.Revit.DotBim/
+    DotBimExport/
   2025/
-    dosymep.Revit.DotBim/
+    DotBimExport/
 artifacts/
-  dosymep.Revit.DotBim.2024.zip
-  dosymep.Revit.DotBim.2025.zip
+  DotBimExport.2024.zip
+  DotBimExport.2025.zip
 ```
 
 ### Versioning
@@ -128,8 +153,7 @@ On `v*` tags, GitHub Actions also creates a release and uploads `artifacts/*`.
 
 ## Sample
 
-![Result](docs/bim.png "Bim")
-![Original](docs/revit.png "Revit")
+See [`sample/sample.bim`](sample/sample.bim).
 
 ## Contributing
 

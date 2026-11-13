@@ -1,6 +1,6 @@
 # Contributing
 
-Thanks for your interest in contributing to **dosymep.Revit.DotBim**.
+Thanks for your interest in contributing to **DotBimExport** / **dosymep.Revit.DotBim**.
 
 ## Before you start
 
@@ -52,12 +52,15 @@ dotnet build revit-dotbim.slnx -c D2025
 | `D2016` … `D2027` | Revit 2016–2027 |
 | `D2026.5` | Revit 2026.5 |
 
+To try the plugin locally, copy the contents of `artifacts/DotBimExport.{version}.zip` (or `bin/{version}/DotBimExport/` with the `.addin` layout) into `%AppData%\Autodesk\Revit\Addins\{version}\`.
+
 More details: [README.md](README.md).
 
 ## Project layout
 
 | Path | Purpose |
 | :--- | :--- |
+| `src/DotBimExport/` | Revit add-in: ribbon app, command, `.addin` manifest |
 | `src/dosymep.Revit.DotBim/` | Public API: `DotBimExtension`, `DotBimOptions` |
 | `src/dosymep.Revit.DotBim/Internal/` | Export context and Revit helpers (not public API) |
 | `build/` | ModularPipelines clean / restore / build / package |
@@ -72,7 +75,7 @@ More details: [README.md](README.md).
 - Prefer small, purposeful types over large catch-all classes.
 - Keep public API changes documented with English XML comments.
 - Do not commit secrets, machine-specific absolute paths, or local export samples with personal paths.
-- Update `README.md` when user-facing behavior changes (export options, supported Revit versions, usage examples, build defaults).
+- Update `README.md` when user-facing behavior changes (plugin UX, export options, supported Revit versions, build defaults).
 - Keep types under `Internal/` internal unless there is a clear public API need.
 - Prefer editing package versions in `Directory.Packages.props` rather than pinning them ad hoc in project files.
 
@@ -86,12 +89,13 @@ Bump the base version in `Directory.Build.props` when preparing a release, then 
 
 ## Testing
 
-There is no automated test suite yet. When changing export behavior:
+There is no automated test suite yet. When changing export or plugin behavior:
 
 1. Build for the Revit version you use, for example `REVIT_VERSIONS=2025` or `-c D2025`.
-2. Export a small 3D view with and without `WithLinks`, `WithElementInfo`, and `WithDocumentInfo`.
-3. Open the resulting `.bim` file in a viewer such as [Online 3D Viewer](https://3dviewer.net/) and check geometry, colors, and info dictionaries.
-4. Note the Revit version and options you used in the pull request.
+2. Install or update the add-in for that Revit year and run **Export DotBim** from a 3D view.
+3. When changing the library API, also exercise `WithLinks`, `WithElementInfo`, and `WithDocumentInfo`.
+4. Open the resulting `.bim` file in a viewer such as [Online 3D Viewer](https://3dviewer.net/) and check geometry, colors, and info dictionaries.
+5. Note the Revit version and options you used in the pull request.
 
 ## Pull requests
 
@@ -111,8 +115,9 @@ CI builds all supported Revit versions on pull requests and `main`. Tag pushes (
 Include as much of the following as possible:
 
 - Revit version
-- `dosymep.Revit.DotBim` version / commit / tag
-- `DotBimOptions` used (`View`, `WithLinks`, `WithElementInfo`, `WithDocumentInfo`)
+- Plugin / library version (commit or tag)
+- Whether you used the ribbon command or called `Document.Export` directly
+- `DotBimOptions` if applicable (`View`, `WithLinks`, `WithElementInfo`, `WithDocumentInfo`)
 - Expected vs actual behavior
 - Minimal steps to reproduce
 - Sample model details if relevant (no confidential project data)
