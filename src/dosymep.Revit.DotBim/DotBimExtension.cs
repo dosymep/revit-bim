@@ -48,6 +48,11 @@ public static class DotBimExtension {
 
         // To skip geometry objects (Curve, Face, etc.)
         customExport.IncludeGeometricObjects = false;
+        
+#if REVIT2020_OR_GREATER
+        customExport.Export(options.View);
+#else
         customExport.Export((View3D) options.View);
+#endif
     }
 }

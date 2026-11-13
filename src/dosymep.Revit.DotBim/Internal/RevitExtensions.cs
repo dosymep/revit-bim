@@ -18,7 +18,7 @@ internal static class RevitExtensions {
     extension(Autodesk.Revit.DB.Element self) {
         public Element ToBim() {
             Element element = new() {
-                Guid = Guid.NewGuid().ToString(),
+                Guid = self.UniqueId,
                 Type = self.GetType().Name,
                 FaceColors = [],
                 Vector = new Vector {X = 0, Y = 0, Z = 0},
