@@ -18,7 +18,7 @@ internal static class RevitExtensions {
     extension(Autodesk.Revit.DB.Element self) {
         public Element ToBim() {
             Element element = new() {
-                Guid = self.UniqueId,
+                Guid = ExportUtils.GetExportId(self.Document, self.Id).ToString(),
                 Type = self.GetType().Name,
                 FaceColors = [],
                 Vector = new Vector {X = 0, Y = 0, Z = 0},
@@ -35,12 +35,17 @@ internal static class RevitExtensions {
                 .OrderBy(item => item, StringComparer.Ordinal)
                 .ToArray();
 
-            return paramNames
+            var dictionary =  paramNames
                 .Select(item => self.LookupParameter(item))
                 .Where(item => item != null)
                 .Select(item => item.ToParam())
                 .Where(item => !string.IsNullOrEmpty(item.Item2))
                 .ToDictionary(item => item.Item1, item => item.Item2!);
+            
+            dictionary.Add(nameof(Autodesk.Revit.DB.Element.Id), self.Id.ToString());
+            dictionary.Add(nameof(Autodesk.Revit.DB.Element.UniqueId), self.UniqueId);
+
+            return dictionary;
         }
     }
 
