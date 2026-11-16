@@ -14,6 +14,7 @@ internal class DotBimExportContext : IExportContext {
     private readonly string _fileName;
     private readonly Document _document;
     private readonly DotBimOptions _options;
+    private readonly HashSet<ElementId>? _categoryIds;
     private readonly Stack<Transform> _transforms = new();
 
     private int _meshId;
@@ -34,10 +35,22 @@ internal class DotBimExportContext : IExportContext {
         _fileName = fileName;
         _currentDocument = _document;
 
+        if(options.CategoryIds != null) {
+            _categoryIds = new HashSet<ElementId>(options.CategoryIds);
+        }
+
         _transforms.Push(Transform.Identity);
     }
 
     private Transform CurrentTransform => _transforms.Peek();
+
+    private bool IsExported(Category? category) {
+        if(_categoryIds == null) {
+            return true;
+        }
+
+        return category != null && _categoryIds.Contains(category.Id);
+    }
 
     public bool Start() {
         if(_options.WithDocumentInfo) {
@@ -56,7 +69,11 @@ internal class DotBimExportContext : IExportContext {
             throw new InvalidOperationException("Current document is not set.");
         }
 
-        Autodesk.Revit.DB.Element element = _currentDocument.GetElement(elementId);
+        Autodesk.Revit.DB.Element? element = _currentDocument.GetElement(elementId);
+        if(element == null || !IsExported(element.Category)) {
+            return RenderNodeAction.Skip;
+        }
+
         _currentElement = element.ToBim();
 
         if(_options.WithElementInfo) {

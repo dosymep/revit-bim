@@ -2,10 +2,14 @@
 
 using Autodesk.Revit.UI;
 
+using DotBimExport.Resources;
+
 namespace DotBimExport;
 
 public sealed class DotBimExportApp : IExternalApplication {
     public Result OnStartup(UIControlledApplication application) {
+        Localization.Apply(application.ControlledApplication.Language);
+
         const string panelName = "dotbim";
 
         RibbonPanel panel = application.GetRibbonPanels()
@@ -14,13 +18,13 @@ public sealed class DotBimExportApp : IExternalApplication {
 
         var buttonData = new PushButtonData(
             "ExportDotBim",
-            "Export\nDotBim",
+            Strings.RibbonButtonText,
             typeof(DotBimExportCommand).Assembly.Location,
             typeof(DotBimExportCommand).FullName);
 
         var button = (PushButton) panel.AddItem(buttonData);
-        button.ToolTip = "Export a 3D view to dotbim (.bim).";
-        
+        button.ToolTip = Strings.RibbonToolTip;
+
         button.Image = LoadImage("DotBim16x16.png");
         button.LargeImage = LoadImage("DotBim32x32.png");
 

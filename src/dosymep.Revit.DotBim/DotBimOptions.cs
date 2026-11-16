@@ -1,4 +1,5 @@
-﻿using Autodesk.Revit.DB;
+﻿using Autodesk.Revit.ApplicationServices;
+using Autodesk.Revit.DB;
 
 namespace dosymep.Revit.DotBim;
 
@@ -40,4 +41,21 @@ public sealed class DotBimOptions {
     /// otherwise, <see langword="false"/>. The default value is <see langword="false"/>.
     /// </value>
     public bool WithDocumentInfo { get; init; }
+
+    /// <summary>
+    /// Gets the category ids included in the export.
+    /// </summary>
+    /// <value>
+    /// Category ids to export. <see langword="null"/> exports every category.
+    /// </value>
+    public IReadOnlyCollection<ElementId>? CategoryIds { get; init; }
+
+    /// <summary>
+    /// Gets the Revit language used for exported names.
+    /// </summary>
+    /// <value>
+    /// A <see cref="LanguageType"/> taken from Revit.
+    /// The default value is <see cref="LanguageType.English_USA"/>.
+    /// </value>
+    public LanguageType NameLanguage { get; init; }
 }
