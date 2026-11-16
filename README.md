@@ -4,19 +4,25 @@
 [![License MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE.md)
 [![Revit 2016-2027](https://img.shields.io/badge/Revit-2016--2027-blue.svg)](https://www.autodesk.com/products/revit/overview)
 
+[Русский](README.ru.md)
+
 A Revit plugin for exporting 3D views to the [dotbim](https://github.com/paireks/dotbim) (`.bim`) format.
 Export is implemented by the `dosymep.Revit.DotBim` library in this repository.
 
 ## Features
 
-- Ribbon command that exports the active 3D view to a `.bim` file
-- Optional export of linked models
-- Optional element and project parameter info
+- Ribbon command with an export settings dialog
+- 3D view selection
+- Optional export of linked models, element parameters, and project information
+- Model category filter
+- Name language selection (`LanguageType` from Revit)
+- UI localization: English (default) and Russian, based on the Revit language
 - Support for Revit 2016–2027 (including `2026.5`)
 
 ## Install
 
-1. Download `DotBimExport.{version}.zip` from [Releases](https://github.com/dosymep/revit-dotbim/releases) (match your Revit year).
+1. Download `DotBimExport.{version}.zip` from [Releases](https://github.com/dosymep/revit-dotbim/releases) (match your
+   Revit year).
 2. Extract the archive into the Revit Addins folder for that version, for example:
 
    `%AppData%\Autodesk\Revit\Addins\2025\`
@@ -31,16 +37,23 @@ DotBimExport.2025.zip
   DotBimExport/
     DotBimExport.dll
     dosymep.Revit.DotBim.dll
+    ru/
+      DotBimExport.resources.dll
     …
 ```
 
 ## Usage
 
-1. Open a **3D view**.
+1. Open a document that has at least one **3D view** (not a template).
 2. On the **dotbim** panel, click **Export DotBim**.
-3. Choose the output `.bim` path.
+3. In the settings dialog, choose:
+    - the 3D view;
+    - the name language;
+    - whether to export element info, document info, and links;
+    - which categories to export.
+4. Confirm export and choose the output `.bim` path.
 
-The plugin exports with links, element info, and document info enabled.
+The dialog and ribbon language follow the Revit language: Russian uses `ru`, everything else uses English.
 
 ### Library API
 
@@ -55,20 +68,26 @@ document.Export("path/to/sample.bim",
         View = view,
         WithLinks = true,
         WithElementInfo = true,
-        WithDocumentInfo = true
+        WithDocumentInfo = true,
+        CategoryIds = null,
+        NameLanguage = LanguageType.English_USA
     });
 ```
 
-| Option | Type | Default | Description |
-|--------|------|---------|-------------|
-| `View` | `View` | required | View used for export (must be a `View3D`) |
-| `WithLinks` | `bool` | `false` | Include linked models |
-| `WithElementInfo` | `bool` | `false` | Include element parameters |
-| `WithDocumentInfo` | `bool` | `false` | Include project information |
+| Option             | Type                              | Default       | Description                                         |
+|--------------------|-----------------------------------|---------------|-----------------------------------------------------|
+| `View`             | `View`                            | required      | View used for export (must be a `View3D`)           |
+| `WithLinks`        | `bool`                            | `false`       | Include linked models                               |
+| `WithElementInfo`  | `bool`                            | `false`       | Include element parameters                          |
+| `WithDocumentInfo` | `bool`                            | `false`       | Include project information                         |
+| `CategoryIds`      | `IReadOnlyCollection<ElementId>?` | `null`        | Categories to export; `null` exports every category |
+| `NameLanguage`     | `LanguageType`                    | `English_USA` | Language used for exported names                    |
 
 ## Build
 
-The repository includes a [ModularPipelines](https://github.com/thomhurst/ModularPipelines) app in `build/`. It cleans `bin`/`obj`, restores the solution, builds `DotBimExport` for each selected Revit version into `bin/<version>/DotBimExport/`, and packages add-in zip archives under `artifacts/`.
+The repository includes a [ModularPipelines](https://github.com/thomhurst/ModularPipelines) app in `build/`. It cleans
+`bin`/`obj`, restores the solution, builds `DotBimExport` for each selected Revit version into
+`bin/<version>/DotBimExport/`, and packages add-in zip archives under `artifacts/`.
 
 Pipeline stages:
 
@@ -96,11 +115,11 @@ dotnet run --project build
 
 ### Environment variables
 
-| Variable | Default | Description |
-| :--- | :--- | :--- |
-| `CONFIGURATION` | `Release` | MSBuild configuration |
-| `REVIT_VERSIONS` | `2016,…,2027` (incl. `2026.5`) | One or more Revit versions. Separate with commas, semicolons, or spaces |
-| `MAX_PARALLELISM` | `max(1, ProcessorCount / 4)` | Max parallel work items for packaging |
+| Variable          | Default                        | Description                                                             |
+|:------------------|:-------------------------------|:------------------------------------------------------------------------|
+| `CONFIGURATION`   | `Release`                      | MSBuild configuration                                                   |
+| `REVIT_VERSIONS`  | `2016,…,2027` (incl. `2026.5`) | One or more Revit versions. Separate with commas, semicolons, or spaces |
+| `MAX_PARALLELISM` | `max(1, ProcessorCount / 4)`   | Max parallel work items for packaging                                   |
 
 #### PowerShell
 
@@ -144,10 +163,10 @@ artifacts/
 
 Base version lives in `Directory.Build.props` (`2.0.0`).
 
-| Context | Example assembly version |
-| :--- | :--- |
+| Context                 | Example assembly version        |
+|:------------------------|:--------------------------------|
 | Local / CI branch build | `2.0.0-{commit}.{revitVersion}` |
-| GitHub tag `v2.1.0` | `2.1.0.{revitVersion}` |
+| GitHub tag `v2.1.0`     | `2.1.0.{revitVersion}`          |
 
 On `v*` tags, GitHub Actions also creates a release and uploads `artifacts/*`.
 

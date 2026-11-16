@@ -21,6 +21,7 @@
         <File Path="CREDITS.md" />
         <File Path="LICENSE.md" />
         <File Path="README.md" />
+        <File Path="README.ru.md" />
     </Folder>
     <Project Path="build/Build.csproj">
         <BuildType Solution="D2018|*" Project="Debug" />
