@@ -170,9 +170,37 @@ Base version lives in `Directory.Build.props` (`2.0.0`).
 
 On `v*` tags, GitHub Actions also creates a release and uploads `artifacts/*`.
 
-## Sample
+## Samples
 
-See [`sample/sample.bim`](sample/sample.bim).
+The [`samples/`](samples/) folder contains Autodesk Revit sample models grouped by Revit year, plus exported `.bim` files where available.
+
+![Sample export preview](samples/sample.png)
+
+Layout:
+
+```text
+samples/
+  sample.png
+  2018/
+    rac_basic_sample_project.rvt
+  2019/
+    rac_advanced_sample_project.rvt
+  2020/
+    rac_advanced_sample_project.rvt
+    rac_advanced_sample_project.bim
+  2021/ … 2027/
+    rac_basic_sample_project.rvt
+    rac_basic_sample_project.bim   # present for some years
+```
+
+| Path | Contents |
+| :--- | :--- |
+| `samples/{year}/` | Revit sample project for that year (`2018`–`2027`) |
+| `samples/{year}/*.rvt` | Source model (`rac_basic_sample_project` or `rac_advanced_sample_project`) |
+| `samples/{year}/*.bim` | Exported dotbim file (when present) |
+| `samples/sample.png` | Preview of an exported model |
+
+Open the matching `.rvt` in Revit, run **Export DotBim**, and compare the result with the `.bim` next to it when one is checked in.
 
 ## Contributing
 

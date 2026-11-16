@@ -170,9 +170,37 @@ artifacts/
 
 На тегах `v*` GitHub Actions также создаёт релиз и загружает `artifacts/*`.
 
-## Пример
+## Примеры
 
-См. [`sample/sample.bim`](sample/sample.bim).
+В папке [`samples/`](samples/) лежат примеры моделей Autodesk Revit, сгруппированные по году Revit, и экспортированные `.bim`, где они есть.
+
+![Превью экспорта](samples/sample.png)
+
+Структура:
+
+```text
+samples/
+  sample.png
+  2018/
+    rac_basic_sample_project.rvt
+  2019/
+    rac_advanced_sample_project.rvt
+  2020/
+    rac_advanced_sample_project.rvt
+    rac_advanced_sample_project.bim
+  2021/ … 2027/
+    rac_basic_sample_project.rvt
+    rac_basic_sample_project.bim   # есть не для всех годов
+```
+
+| Путь | Содержимое |
+| :--- | :--- |
+| `samples/{year}/` | Пример проекта Revit для этого года (`2018`–`2027`) |
+| `samples/{year}/*.rvt` | Исходная модель (`rac_basic_sample_project` или `rac_advanced_sample_project`) |
+| `samples/{year}/*.bim` | Экспортированный файл dotbim (если есть) |
+| `samples/sample.png` | Превью экспортированной модели |
+
+Откройте подходящий `.rvt` в Revit, выполните **Export DotBim** / **Экспорт DotBim** и сравните результат с соседним `.bim`, если он есть в репозитории.
 
 ## Участие в разработке
 

@@ -69,7 +69,7 @@ More details: [README.md](README.md).
 | `src/dosymep.Revit.DotBim/`          | Public API: `DotBimExtension`, `DotBimOptions`                         |
 | `src/dosymep.Revit.DotBim/Internal/` | Export context and Revit helpers (not public API)                      |
 | `build/`                             | ModularPipelines clean / restore / build / package                     |
-| `sample/`                            | Sample `.bim` output                                                   |
+| `samples/`                           | Revit sample models by year, exported `.bim` files, preview image      |
 | `docs/`                              | Screenshots and documentation assets                                   |
 | `Directory.Build.props`              | Shared version and package metadata                                    |
 | `Directory.Packages.props`           | Central package versions                                               |
