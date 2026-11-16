@@ -1,0 +1,45 @@
+﻿<Project Sdk="Autodesk.Revit.Sdk.Refs/2.0.0">
+
+    <PropertyGroup>
+        <UseWpf>true</UseWpf>
+        <ShowBuildInfo>false</ShowBuildInfo>
+        <NeutralLanguage>en</NeutralLanguage>
+        <RootNamespace>DotBimExport</RootNamespace>
+        <Configurations>Debug;Release;D2016;D2017;D2018;D2019;D2020;D2021;D2022;D2023;D2024;D2025;D2026;D2026.5;D2027</Configurations>
+    </PropertyGroup>
+
+    <PropertyGroup>
+        <Description>A Revit plugin for exporting 3D views to dotbim (.bim), powered by dosymep.Revit.DotBim.</Description>
+        <PackageTags>dosymep, revit, bim, dotbim, export</PackageTags>
+    </PropertyGroup>
+
+    <ItemGroup>
+      <ProjectReference Include="..\dosymep.Revit.DotBim\dosymep.Revit.DotBim.csproj" />
+      <PackageReference Include="Microsoft.Xaml.Behaviors.Wpf" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Update="DotBimExport.addin">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </None>
+    </ItemGroup>
+
+    <ItemGroup>
+      <None Remove="Resources\dotbim.png" />
+      <Resource Include="Resources\DotBim.png" />
+      <None Remove="Resources\DotBim16x16.png" />
+      <Resource Include="Resources\DotBim16x16.png" />
+      <None Remove="Resources\DotBim32x32.png" />
+      <Resource Include="Resources\DotBim32x32.png" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <EmbeddedResource Update="Resources\Strings.resx">
+        <Generator></Generator>
+      </EmbeddedResource>
+      <Compile Update="Resources\Strings.Designer.cs">
+        <DependentUpon>Strings.resx</DependentUpon>
+      </Compile>
+    </ItemGroup>
+
+</Project>
