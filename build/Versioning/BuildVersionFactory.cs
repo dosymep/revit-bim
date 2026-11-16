@@ -6,18 +6,12 @@ namespace Build.Versioning;
 
 public sealed class BuildVersionFactory {
     private readonly string _prefix;
-    private readonly string? _tagVersion;
 
     public BuildVersionFactory(string solutionRoot) {
-        _tagVersion = TryReadTagVersion();
-        _prefix = _tagVersion ?? ReadPrefix(solutionRoot);
+        _prefix = TryReadTagVersion() ?? ReadPrefix(solutionRoot);
     }
 
     public string ForRevit(IGitInformation git, string revitVersion) {
-        if(_tagVersion is not null) {
-            return $"{_tagVersion}.{revitVersion}";
-        }
-
         string hash = FirstNonEmpty(git.LastCommitShortSha, git.LastCommitSha)
             ?? throw new InvalidOperationException("Git commit hash is unavailable.");
 
