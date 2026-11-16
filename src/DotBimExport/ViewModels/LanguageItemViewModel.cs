@@ -10,7 +10,7 @@ public sealed class LanguageItemViewModel : ObservableObject {
         Name = GetLanguageName(language);
         Language = language;
     }
-    
+
     public string Name { get; }
     public LanguageType Language { get; }
 
@@ -18,7 +18,9 @@ public sealed class LanguageItemViewModel : ObservableObject {
     private static CultureInfo GetCultureInfo(LanguageType languageType) {
         string cultureCode = languageType switch {
             LanguageType.English_USA => "en-US",
+#if REVIT2018_OR_GREATER
             LanguageType.English_GB => "en-GB",
+#endif
             LanguageType.German => "de-DE",
             LanguageType.Spanish => "es-ES",
             LanguageType.French => "fr-FR",
