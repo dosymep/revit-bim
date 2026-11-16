@@ -24,6 +24,9 @@
   <data name="ExportElementInfo" xml:space="preserve">
     <value>Выгружать информацию элемента</value>
   </data>
+  <data name="ExportDocumentInfo" xml:space="preserve">
+    <value>Выгружать информацию документа</value>
+  </data>
   <data name="ExportLinks" xml:space="preserve">
     <value>Выгружать связи</value>
   </data>

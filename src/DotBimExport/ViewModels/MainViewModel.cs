@@ -19,6 +19,7 @@ public sealed class MainViewModel : ObservableObject {
     private ViewItemViewModel? _selectedView;
     private LanguageItemViewModel? _nameLanguage;
     private bool _exportElementInfo = true;
+    private bool _exportDocumentInfo = true;
     private bool _exportLinks = true;
 
     /// <summary>
@@ -86,6 +87,11 @@ public sealed class MainViewModel : ObservableObject {
     public bool ExportElementInfo {
         get => _exportElementInfo;
         set => SetProperty(ref _exportElementInfo, value);
+    }
+
+    public bool ExportDocumentInfo {
+        get => _exportDocumentInfo;
+        set => SetProperty(ref _exportDocumentInfo, value);
     }
 
     /// <summary>

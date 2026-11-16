@@ -18,6 +18,8 @@ public static class Strings {
 
     public static string ExportElementInfo => ResourceManager.GetString(nameof(ExportElementInfo), CultureInfo.CurrentUICulture)!;
 
+    public static string ExportDocumentInfo => ResourceManager.GetString(nameof(ExportDocumentInfo), CultureInfo.CurrentUICulture)!;
+
     public static string ExportLinks => ResourceManager.GetString(nameof(ExportLinks), CultureInfo.CurrentUICulture)!;
 
     public static string Categories => ResourceManager.GetString(nameof(Categories), CultureInfo.CurrentUICulture)!;

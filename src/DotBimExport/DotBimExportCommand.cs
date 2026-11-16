@@ -59,7 +59,7 @@ internal sealed class DotBimExportCommand : IExternalCommand {
                 View = selectedView.View,
                 WithLinks = viewModel.ExportLinks,
                 WithElementInfo = viewModel.ExportElementInfo,
-                WithDocumentInfo = true,
+                WithDocumentInfo = viewModel.ExportDocumentInfo,
                 CategoryIds = viewModel.SelectedCategoryIds,
                 NameLanguage = nameLanguage.Language
             });
